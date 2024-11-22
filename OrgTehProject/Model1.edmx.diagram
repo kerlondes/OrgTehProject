@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4d3614e8c8c649789b0ec945bd130bc2" Name="Diagram1">
+        <EntityTypeShape EntityType="OrgTehModel.Basket" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.CategoryOfTehnika" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.CountryForMade" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.ItemInZakaz" Width="1.5" PointX="7.5" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.Role" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.StatusZakaza" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.sysdiagram" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.Tehnika" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.TypeTehnika" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.User" Width="1.5" PointX="3" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="OrgTehModel.Zakaz" Width="1.5" PointX="5.25" PointY="5.625" IsExpanded="true" />
+        <AssociationConnector Association="OrgTehModel.FK_Basket_Tehnika" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Basket_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_ItemInZakaz_Basket" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Tehnika_CategoryOfTehnika" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Tehnika_CountryForMade" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_ItemInZakaz_Zakaz" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Users_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Zakaz_StatusZakaza" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Tehnika_TypeTehnika" ManuallyRouted="false" />
+        <AssociationConnector Association="OrgTehModel.FK_Zakaz_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

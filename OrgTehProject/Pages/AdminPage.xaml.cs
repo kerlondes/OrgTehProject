@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OrgTehProject
+namespace OrgTehProject.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для AdminPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AdminPage : Page
     {
-        public MainWindow()
+        public AdminPage()
         {
             InitializeComponent();
         }
