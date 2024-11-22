@@ -87,8 +87,8 @@
           <Property Name="Id_User" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FIO" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="Id_Role" Type="int" Nullable="false" />
-          <Property Name="Login_Hex" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Password_Hex" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Login_Hash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password_Hash" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Zakaz">
           <Key>
@@ -372,8 +372,8 @@
           <Property Name="Id_User" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FIO" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Id_Role" Type="Int32" Nullable="false" />
-          <Property Name="Login_Hex" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password_Hex" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Login_Hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password_Hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Baskets" Relationship="Self.FK_Basket_Users" FromRole="Users" ToRole="Basket" />
           <NavigationProperty Name="Role" Relationship="Self.FK_Users_Role" FromRole="Users" ToRole="Role" />
           <NavigationProperty Name="Zakazs" Relationship="Self.FK_Zakaz_Users" FromRole="Users" ToRole="Zakaz" />
@@ -658,8 +658,8 @@
                 <ScalarProperty Name="Id_User" ColumnName="Id_User" />
                 <ScalarProperty Name="FIO" ColumnName="FIO" />
                 <ScalarProperty Name="Id_Role" ColumnName="Id_Role" />
-                <ScalarProperty Name="Login_Hex" ColumnName="Login_Hex" />
-                <ScalarProperty Name="Password_Hex" ColumnName="Password_Hex" />
+                <ScalarProperty Name="Login_Hash" ColumnName="Login_Hash" />
+                <ScalarProperty Name="Password_Hash" ColumnName="Password_Hash" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

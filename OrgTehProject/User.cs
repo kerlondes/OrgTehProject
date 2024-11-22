@@ -24,8 +24,8 @@ namespace OrgTehProject
         public int Id_User { get; set; }
         public string FIO { get; set; }
         public int Id_Role { get; set; }
-        public string Login_Hex { get; set; }
-        public string Password_Hex { get; set; }
+        public string Login_Hash { get; set; }
+        public string Password_Hash { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Basket> Baskets { get; set; }

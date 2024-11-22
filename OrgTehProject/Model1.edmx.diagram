@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4d3614e8c8c649789b0ec945bd130bc2" Name="Diagram1">
+      <Diagram DiagramId="94c609219f2f4690bce702d7f299ba1e" Name="Diagram1">
         <EntityTypeShape EntityType="OrgTehModel.Basket" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="OrgTehModel.CategoryOfTehnika" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
         <EntityTypeShape EntityType="OrgTehModel.CountryForMade" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
