@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OrgTehProject.Windows"
         mc:Ignorable="d"
         Icon="\Images\logo.ico"
-        Title="OrgTehProject" Height="450" Width="800">
+        Title="OrgTehProject" Height="609" Width="1115">
     <Grid>
         <Frame x:Name="MyFrame"/>
     </Grid>

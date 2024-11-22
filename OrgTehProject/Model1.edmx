@@ -66,7 +66,7 @@
           </Key>
           <Property Name="Id_Tehnika" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Id_CategoryOfTehnika" Type="int" Nullable="false" />
           <Property Name="Id_TypeOfTehnika" Type="int" Nullable="false" />
@@ -346,7 +346,7 @@
           </Key>
           <Property Name="Id_Tehnika" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Id_CategoryOfTehnika" Type="Int32" Nullable="false" />
           <Property Name="Id_TypeOfTehnika" Type="Int32" Nullable="false" />

@@ -22,7 +22,7 @@ namespace OrgTehProject
     
         public int Id_Tehnika { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public string Description { get; set; }
         public int Id_CategoryOfTehnika { get; set; }
         public int Id_TypeOfTehnika { get; set; }
