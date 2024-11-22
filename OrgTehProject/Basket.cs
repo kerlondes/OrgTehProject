@@ -24,6 +24,8 @@ namespace OrgTehProject
         public int Id_User { get; set; }
         public int Id_Tehnika { get; set; }
         public int Quantity { get; set; }
+        public Nullable<decimal> TotalPrice { get; set; }
+        public bool IsContinued { get; set; }
     
         public virtual Tehnika Tehnika { get; set; }
         public virtual User User { get; set; }

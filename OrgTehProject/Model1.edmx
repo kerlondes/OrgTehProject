@@ -13,6 +13,8 @@
           <Property Name="Id_User" Type="int" Nullable="false" />
           <Property Name="Id_Tehnika" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsContinued" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CategoryOfTehnika">
           <Key>
@@ -284,6 +286,8 @@
           <Property Name="Id_User" Type="Int32" Nullable="false" />
           <Property Name="Id_Tehnika" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsContinued" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Tehnika" Relationship="Self.FK_Basket_Tehnika" FromRole="Basket" ToRole="Tehnika" />
           <NavigationProperty Name="User" Relationship="Self.FK_Basket_Users" FromRole="Basket" ToRole="Users" />
           <NavigationProperty Name="ItemInZakazs" Relationship="Self.FK_ItemInZakaz_Basket" FromRole="Basket" ToRole="ItemInZakaz" />
@@ -575,6 +579,8 @@
                 <ScalarProperty Name="Id_User" ColumnName="Id_User" />
                 <ScalarProperty Name="Id_Tehnika" ColumnName="Id_Tehnika" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="IsContinued" ColumnName="IsContinued" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

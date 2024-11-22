@@ -2,18 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace OrgTehProject.Pages
 {
@@ -24,14 +23,54 @@ namespace OrgTehProject.Pages
     {
         private OrgTehEntities m_entities = OrgTehEntities.GetInstance();
         private List<Tehnika> allProducts; // Список всех товаров для фильтрации
+        private List<Basket> basketItems;
         public BuyerPage()
         {
             InitializeComponent();
+        }
+        private void LoadBasket()
+        {
+            // Загружаем корзину из базы данных, включая связанные сущности
+            basketItems = m_entities.Baskets
+                .Include(b => b.User) // Загрузка данных пользователя
+                .Include(b => b.Tehnika.TypeTehnika).Where(b=> b.IsContinued == false) // Загрузка типа техники
+                .ToList();
+
+            // Добавляем вычисляемую стоимость для каждого товара
+            foreach (var basket in basketItems)
+            {
+                // Вычисляем стоимость для каждого элемента корзины
+                basket.TotalPrice = basket.Quantity * basket.Tehnika.Price;
+            }
+
+            // Обновляем DataGrid
+            ProductsInOrder2.ItemsSource = basketItems;
+
+            // Подсчитываем общую стоимость
+            UpdateTotalPrice2();
+        }
+        // Метод для обновления общей стоимости
+        private void UpdateTotalPrice2()
+        {
+            if (basketItems == null || !basketItems.Any())
+            {
+                TotalPriceLabel2.Content = "Итого: 0";
+                return;
+            }
+
+            // Суммируем стоимости всех элементов корзины
+            decimal totalPrice = Convert.ToDecimal(basketItems.Sum(b => b.TotalPrice));
+            TotalPriceLabel2.Content = $"Итого: {totalPrice} руб.";
+        }
+        private void RefreshBasket_Click(object sender, RoutedEventArgs e)
+        {
+            LoadBasket();
         }
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             LoadProducts();
             LoadProductTypes();
+            LoadBasket();
         }
         private void UpdateTotalPrice()
         {
@@ -105,7 +144,7 @@ namespace OrgTehProject.Pages
                     Width = 200
                 };
 
-                var image = new Image
+                var image = new System.Windows.Controls.Image
                 {
                     Source = new BitmapImage(new Uri(System.IO.Path.Combine(projectPath, product.Image), UriKind.Relative)),
                     Height = 150,
@@ -131,7 +170,7 @@ namespace OrgTehProject.Pages
 
                 var controlPanel = new StackPanel
                 {
-                    Orientation = Orientation.Horizontal,
+                    Orientation = System.Windows.Controls.Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     Margin = new Thickness(0, 5, 0, 0)
                 };
@@ -266,7 +305,7 @@ namespace OrgTehProject.Pages
                             totalPrice += productTotalPrice;
 
                             // Добавляем товар в корзину
-                            var selectedProduct = stackPanel.Children.OfType<Image>().FirstOrDefault()?.Tag as Tehnika;
+                            var selectedProduct = stackPanel.Children.OfType<System.Windows.Controls.Image>().FirstOrDefault()?.Tag as Tehnika;
                             if (selectedProduct != null)
                             {
                                 Basket basketItem = new Basket
@@ -305,7 +344,7 @@ namespace OrgTehProject.Pages
         {
             if (e.ClickCount == 2) // Двойной клик
             {
-                var image = sender as Image;
+                var image = sender as System.Windows.Controls.Image;
                 if (image?.Tag is Tehnika tehnika)
                 {
                     // Открываем окно с информацией
@@ -314,6 +353,152 @@ namespace OrgTehProject.Pages
                     detailsWindow.ShowDialog();
                 }
             }
+        }
+
+        private void AddToOrder(object sender, RoutedEventArgs e)
+        {
+            if (basketItems == null || !basketItems.Any())
+            {
+                MessageBox.Show("Корзина пуста. Добавьте товары перед оформлением заказа.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Создаем новый заказ
+            var newZakaz = new Zakaz
+            {
+                Id_User = Session.currentUser.Id_User,
+                Id_Status = 1 // Предполагаем, что "1" — статус нового заказа
+            };
+            m_entities.Zakazs.Add(newZakaz);
+            m_entities.SaveChanges();
+
+            // Добавляем товары в заказ и обновляем их статус в корзине
+            foreach (var item in basketItems)
+            {
+                var itemInZakaz = new ItemInZakaz
+                {
+                    Id_Zakaz = newZakaz.Id_Zakaz,
+                    Id_Basket = item.Id_Basket
+                };
+                m_entities.ItemInZakazs.Add(itemInZakaz);
+
+                // Обновляем статус элемента корзины
+                var basketItem = m_entities.Baskets.FirstOrDefault(b => b.Id_Basket == item.Id_Basket);
+                if (basketItem != null)
+                {
+                    basketItem.IsContinued = true;
+                }
+            }
+
+            // Сохраняем изменения
+            m_entities.SaveChanges();
+
+            // Генерируем чек
+            GenerateWordReceiptOpenXml(newZakaz, basketItems);
+
+            MessageBox.Show("Заказ успешно оформлен!", "Оформление заказа", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            // Обновляем данные корзины
+            LoadBasket();
+        }
+
+        private void GenerateWordReceiptOpenXml(Zakaz zakaz, List<Basket> items)
+        {
+            // Путь к папке для сохранения чеков
+            string receiptDirectory = @"Receipts";
+            if (!Directory.Exists(receiptDirectory))
+            {
+                Directory.CreateDirectory(receiptDirectory);
+            }
+
+            // Формируем имя файла чека
+            string receiptFileName = System.IO.Path.Combine(receiptDirectory, $"Receipt_{zakaz.Id_Zakaz}.docx");
+
+
+            // Создаем Word-документ
+            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(receiptFileName, WordprocessingDocumentType.Document))
+            {
+                // Добавляем основную часть документа
+                MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
+                mainPart.Document = new Document();
+                Body body = mainPart.Document.AppendChild(new Body());
+
+                // Заголовок
+                body.Append(CreateParagraph("ООО \"Бытовая техника\"", 14, true, JustificationValues.Center));
+                body.Append(CreateParagraph("Добро пожаловать", 12, false, JustificationValues.Center));
+                body.Append(CreateParagraph("ККМ 00075411     #3969", 10, false, JustificationValues.Center));
+                body.Append(CreateParagraph("ИНН 1087746942040", 10, false, JustificationValues.Center));
+                body.Append(CreateParagraph("ЭКЛЗ 3851495566", 10, false, JustificationValues.Center));
+                body.Append(CreateParagraph($"Чек № {zakaz.Id_Zakaz}", 12, false, JustificationValues.Left));
+                body.Append(CreateParagraph("СИС.", 10, false, JustificationValues.Left));
+
+                // Таблица товаров
+                DocumentFormat.OpenXml.Wordprocessing.Table table = new DocumentFormat.OpenXml.Wordprocessing.Table();
+
+                // Заголовок таблицы
+                DocumentFormat.OpenXml.Wordprocessing.TableRow headerRow = new DocumentFormat.OpenXml.Wordprocessing.TableRow();
+                headerRow.Append(CreateCell("Наименование товара", true));
+                headerRow.Append(CreateCell("Количество", true));
+                headerRow.Append(CreateCell("Стоимость", true));
+                table.Append(headerRow);
+
+                // Заполнение таблицы товарами
+                decimal total = 0;
+                foreach (var item in items)
+                {
+                    DocumentFormat.OpenXml.Wordprocessing.TableRow row = new DocumentFormat.OpenXml.Wordprocessing.TableRow();
+                    row.Append(CreateCell(item.Tehnika.Name));
+                    row.Append(CreateCell(item.Quantity.ToString()));
+                    decimal price = item.Quantity * item.Tehnika.Price;
+                    total += price;
+                    row.Append(CreateCell(price.ToString("C")));
+                    table.Append(row);
+                }
+
+                // Добавляем таблицу в документ
+                body.Append(table);
+
+                // Итоговая сумма
+                body.Append(CreateParagraph($"Итог: {total:C}", 12, true, JustificationValues.Left));
+                body.Append(CreateParagraph("************************", 10, false, JustificationValues.Center));
+                body.Append(CreateParagraph("      00003751# 059705", 10, false, JustificationValues.Center));
+
+                // Сохраняем документ
+                mainPart.Document.Save();
+            }
+
+            // Уведомляем пользователя
+            MessageBox.Show($"Чек сохранен по пути: {receiptFileName}", "Чек", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        // Создание параграфа
+        private DocumentFormat.OpenXml.Wordprocessing.Paragraph CreateParagraph(string text, int fontSize, bool isBold, JustificationValues alignment)
+        {
+            DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph = new DocumentFormat.OpenXml.Wordprocessing.Paragraph();
+            DocumentFormat.OpenXml.Wordprocessing.Run run = new DocumentFormat.OpenXml.Wordprocessing.Run();
+            DocumentFormat.OpenXml.Wordprocessing.RunProperties runProperties = new DocumentFormat.OpenXml.Wordprocessing.RunProperties();
+
+            // Устанавливаем размер шрифта и жирность
+            runProperties.Append(new DocumentFormat.OpenXml.Wordprocessing.FontSize { Val = (fontSize * 2).ToString() });
+            if (isBold) runProperties.Append(new DocumentFormat.OpenXml.Wordprocessing.Bold());
+
+            run.Append(runProperties);
+            run.Append(new DocumentFormat.OpenXml.Wordprocessing.Text(text));
+
+            // Добавляем текст в параграф
+            paragraph.Append(run);
+            paragraph.ParagraphProperties = new DocumentFormat.OpenXml.Wordprocessing.ParagraphProperties(new DocumentFormat.OpenXml.Wordprocessing.Justification { Val = alignment });
+
+            return paragraph;
+        }
+
+        // Создание ячейки таблицы
+        private DocumentFormat.OpenXml.Wordprocessing.TableCell CreateCell(string text, bool isBold = false)
+        {
+            DocumentFormat.OpenXml.Wordprocessing.TableCell cell = new DocumentFormat.OpenXml.Wordprocessing.TableCell();
+            DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph = CreateParagraph(text, 12, isBold, JustificationValues.Left);
+            cell.Append(paragraph);
+            return cell;
         }
     }
 }
