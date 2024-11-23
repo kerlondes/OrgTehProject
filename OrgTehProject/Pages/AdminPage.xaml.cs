@@ -23,6 +23,39 @@ namespace OrgTehProject.Pages
             InitializeComponent();
             LoadData();
             SetupFilters();
+            LoadOrders();
+        }
+        private void LoadOrders()
+        {
+            try
+            {
+                // Загружаем список заказов с пользователями и статусами
+                var orders = m_entities.Zakazs
+                    .Include(o => o.StatusZakaza)
+                    .Include(o => o.User)
+                    .ToList();
+
+                // Устанавливаем источник данных для DataGrid
+                ProductsInOrder.ItemsSource = orders;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void UpdateTable2_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Сохраняем изменения в базе данных
+                m_entities.SaveChanges();
+                MessageBox.Show("Изменения успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка сохранения данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         // Загружаем все товары и отображаем в DataGrid

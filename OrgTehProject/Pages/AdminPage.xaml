@@ -43,6 +43,22 @@
                     <Button HorizontalAlignment="Left" Content="Добавить новый товар" Width="295" Click="AddNewTehnika_Click" Margin="0,10" />
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Просмотр заказов">
+                <StackPanel Margin="10">
+                    <StackPanel Margin="10">
+                        <DataGrid AutoGenerateColumns="False"  Height="585" 
+                        x:Name="ProductsInOrder" Background="#FFFFFF" BorderBrush="#E0E0E0" BorderThickness="1"
+                        ItemsSource="{Binding}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Номер заказа" Binding="{Binding Id_Zakaz}" />
+                                <DataGridTextColumn Width="*" Header="Статус" Binding="{Binding StatusZakaza.Name}" />
+                                <DataGridTextColumn Width="*" Header="ФИО пользователя" Binding="{Binding User.FIO}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Button Margin="0,0,0,0" Content="Изменить таблицу заказов" Width="296" Click="UpdateTable2_Click" />
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </Grid>
 </Page>
