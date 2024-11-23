@@ -5,10 +5,44 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OrgTehProject.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      Width="1822" Height="693"
       Title="AdminPage">
 
-    <Grid>
-        
+    <Grid Background="#F4E8D3">
+        <TabControl Margin="10">
+            <!-- Просмотр каталога продукции -->
+            <TabItem Header="Просмотр списка техники">
+                <StackPanel Margin="10">
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,10,0" Width="220">
+                        <StackPanel Width="200">
+                            <Label Content="Фильтрация по типу техники" FontSize="14" />
+                            <ComboBox x:Name="TypeProduct" Margin="0,10" SelectionChanged="TypeProduct_SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Width="200" Margin="0,10">
+                            <Label Content="Поиск по названию техники" FontSize="14" />
+                            <TextBox x:Name="NameFind" Margin="0,10" TextChanged="NameFind_TextChanged"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <DataGrid AutoGenerateColumns="False"  Height="393" 
+                  x:Name="ProductsInOrder2" Background="#FFFFFF" BorderBrush="#E0E0E0" BorderThickness="1"
+                  ItemsSource="{Binding}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Header="Номер" Binding="{Binding Id_Tehnika}" />
+                            <DataGridTextColumn Width="*" Header="Название техники" Binding="{Binding Name}" />
+                            <DataGridTextColumn Width="*" Header="Цена" Binding="{Binding Price}" />
+                            <DataGridTextColumn Width="*" Header="Описание" Binding="{Binding Description}" />
+                            <DataGridTextColumn Width="*" Header="Категория техники" Binding="{Binding CategoryOfTehnika.Name}" />
+                            <DataGridTextColumn Width="*" Header="Тип техники" Binding="{Binding TypeTehnika.Name}" />
+                            <DataGridTextColumn Width="*" Header="Страна производства" Binding="{Binding CountryForMade.Name}" />
+                            <DataGridTextColumn Width="*" Header="Название картинки" Binding="{Binding Image}" />
+                            <DataGridTextColumn Width="*" Header="Статус активности товара" Binding="{Binding IsEnabel}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Изменить таблицу техник" Width="295" Click="UpdateTable_Click" Margin="10" />
+                    <Button HorizontalAlignment="Left" Content="Добавить новый товар" Width="295" Click="AddNewTehnika_Click" Margin="0,10" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

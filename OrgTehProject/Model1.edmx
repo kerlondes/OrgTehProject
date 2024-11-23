@@ -74,6 +74,7 @@
           <Property Name="Id_TypeOfTehnika" Type="int" Nullable="false" />
           <Property Name="Id_CountryForMade" Type="int" Nullable="false" />
           <Property Name="Image" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="IsEnabel" Type="bit" />
         </EntityType>
         <EntityType Name="TypeTehnika">
           <Key>
@@ -356,6 +357,7 @@
           <Property Name="Id_TypeOfTehnika" Type="Int32" Nullable="false" />
           <Property Name="Id_CountryForMade" Type="Int32" Nullable="false" />
           <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsEnabel" Type="Boolean" />
           <NavigationProperty Name="Baskets" Relationship="Self.FK_Basket_Tehnika" FromRole="Tehnika" ToRole="Basket" />
           <NavigationProperty Name="CategoryOfTehnika" Relationship="Self.FK_Tehnika_CategoryOfTehnika" FromRole="Tehnika" ToRole="CategoryOfTehnika" />
           <NavigationProperty Name="CountryForMade" Relationship="Self.FK_Tehnika_CountryForMade" FromRole="Tehnika" ToRole="CountryForMade" />
@@ -647,6 +649,7 @@
                 <ScalarProperty Name="Id_TypeOfTehnika" ColumnName="Id_TypeOfTehnika" />
                 <ScalarProperty Name="Id_CountryForMade" ColumnName="Id_CountryForMade" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IsEnabel" ColumnName="IsEnabel" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

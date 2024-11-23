@@ -28,6 +28,7 @@ namespace OrgTehProject
         public int Id_TypeOfTehnika { get; set; }
         public int Id_CountryForMade { get; set; }
         public string Image { get; set; }
+        public Nullable<bool> IsEnabel { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Basket> Baskets { get; set; }
