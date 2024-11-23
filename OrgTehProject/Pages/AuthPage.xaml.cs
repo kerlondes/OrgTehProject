@@ -163,6 +163,18 @@ namespace OrgTehProject.Pages
                 logins[logins.Length - 1] = $"{loginHash} {passwordHash} {DateTime.Now}";
                 Registry.SetValue(AppRegistryPath, "login", logins, RegistryValueKind.MultiString);
                 MessageBox.Show("Новый пользователь");
+                Session.currentUser = user;
+
+                switch (user.Role.Name)
+                {
+                    case "Покупатель":
+                        m_mainWindow.NavigateToBuyerPage();
+                        break;
+                    case "Администратор":
+                        m_mainWindow.NavigateToAdminPage();
+                        break;
+                }
+                return;
             }
         }
         private void TogglePasswordVisibility(object sender, RoutedEventArgs e)
