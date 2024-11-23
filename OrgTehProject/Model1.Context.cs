@@ -38,7 +38,6 @@ namespace OrgTehProject
         public virtual DbSet<ItemInZakaz> ItemInZakazs { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<StatusZakaza> StatusZakazas { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Tehnika> Tehnikas { get; set; }
         public virtual DbSet<TypeTehnika> TypeTehnikas { get; set; }
         public virtual DbSet<User> Users { get; set; }
